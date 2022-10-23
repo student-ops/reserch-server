@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  voicevox:
+    image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
+    ports:
+      - "50021:50021"
+  broker-service:
+    build:
+      context: ./../broker-service
+      dockerfile: ./../broker-service/broker-service.dockerfile
+    ports:
+      - "8081:8080"
