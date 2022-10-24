@@ -11,10 +11,6 @@ type RequestPayload struct {
 	Voice   VoicePayload `json:"voice,omitempty"`
 }
 
-type VoicePayload struct {
-	Speaker    string `json:"speaker"`
-	Content string `json:"content"`
-}
 
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
 	payload := jsonResponse{
@@ -46,7 +42,7 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
 
 	// call the service
-	request, err := http.NewRequest("POST", "http://authentication-service/authenticate:8080", bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest("POST", "http://voice-service/generate:8080", bytes.NewBuffer(jsonData))
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -58,6 +54,7 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 		app.errorJSON(w, err)
 		return
 	}
+
 	defer response.Body.Close()
 
 	// make sure we get back the correct status code
@@ -68,9 +65,11 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 		app.errorJSON(w, errors.New("error calling auth service"))
 		return
 	}
-
-	// create a variable we'll read response.Body into
-	var jsonFromService jsonResponse
+	buff := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buff, resp.Body); err != nil {
+		app.errorJSON(2,err)
+		return
+	}
 
 	// decode the json from the auth service
 	err = json.NewDecoder(response.Body).Decode(&jsonFromService)
@@ -79,15 +78,6 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 		return
 	}
 
-	if jsonFromService.Error {
-		app.errorJSON(w, err, http.StatusUnauthorized)
-		return
-	}
-
-	var payload jsonResponse
-	payload.Error = false
-	payload.Message = "Aceepted"
-	payload.Data = jsonFromService.Data
 
 	app.writeJSON(w, http.StatusAccepted, payload)
 }

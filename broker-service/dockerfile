@@ -1,0 +1,10 @@
+FROM golang:1.18 AS build
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY ./go.mod .
+COPY ./go.sum .
+COPY ./cmd/api/*.go ./cmd/
+RUN go build -o brokerApp ./cmd/*.go
+CMD ["/app/brokerApp"]
