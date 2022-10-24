@@ -41,7 +41,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *Config) voice(w http.ResponseWriter, a VoicePayload) {
+func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 	// create some json we'll send to the auth microservice
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
 
