@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"io"
 )
 type RequestPayload struct {
 	Action string      `json:"action"`
@@ -66,13 +67,12 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 		return
 	}
 	buff := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buff, resp.Body); err != nil {
-		app.errorJSON(2,err)
+	if _, err := io.Copy(buff, response.Body); err != nil {
+		app.errorJSON(w,errors.New("error copying respose from speaker"))
 		return
 	}
 
-	// decode the json from the auth service
-	err = json.NewDecoder(response.Body).Decode(&jsonFromService)
+	// err = json.NewDecoder(response.Body).Decode(&jsonFromService)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
