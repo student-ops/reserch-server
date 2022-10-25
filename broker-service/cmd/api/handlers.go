@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"io"
 )
 type RequestPayload struct {
 	Action string      `json:"action"`
