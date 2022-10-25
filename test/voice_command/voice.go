@@ -123,7 +123,6 @@ func synth(cfg config, id int, params *Params) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 	buff := bytes.NewBuffer(nil)
-	g
 	if _, err := io.Copy(buff, resp.Body); err != nil {
 		return nil, err
 	}
