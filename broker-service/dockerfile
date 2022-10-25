@@ -5,6 +5,6 @@ WORKDIR /app
 
 COPY ./go.mod .
 COPY ./go.sum .
-COPY ./cmd/api/*.go ./cmd/
-RUN go build -o brokerApp ./cmd/*.go
+COPY ./cmd/api/*.go .
+RUN go build -o brokerApp ./*.go
 CMD ["/app/brokerApp"]

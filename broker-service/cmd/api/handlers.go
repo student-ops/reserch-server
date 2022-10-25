@@ -42,7 +42,7 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
 
 	// call the service
-	request, err := http.NewRequest("POST", "http://voice-service/generate:8080", bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest("POST", "http://speaker-service/speak:8080", bytes.NewBuffer(jsonData))
 	if err != nil {
 		app.errorJSON(w, err)
 		return
