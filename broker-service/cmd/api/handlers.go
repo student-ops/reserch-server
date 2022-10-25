@@ -4,12 +4,19 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"io"
 )
 type RequestPayload struct {
 	Action string      `json:"action"`
-	Voice   VoicePayload `json:"voice,omitempty"`
+	Voice  VoicePayload `json:"voice,omitempty"`
+}
+
+type VoicePayload struct{
+	Speaker int `json:"speaker"`
+	Content string `json:"content"`
 }
 
 
@@ -32,7 +39,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 
 	switch requestPayload.Action {
 	case "voice":
-		app.voice(w, requestPayload.Voice)
+		app.Voice(w, requestPayload.Voice)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
 	}
@@ -66,19 +73,14 @@ func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
 		app.errorJSON(w, errors.New("error calling auth service"))
 		return
 	}
-	buff := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buff, response.Body); err != nil {
-		app.errorJSON(w,errors.New("error copying respose from speaker"))
+	buff :=	bytes.NewBuffer(nil)
+	if _, err := io.Copy(buff,response.Body); err != nil {
+		app.errorJSON(w,errors.New("error reading audio data"))
 		return
 	}
-
-	// err = json.NewDecoder(response.Body).Decode(&jsonFromService)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
+	if err := ioutil.WriteFile("voicevox.wav",buff.Bytes(),0644);err != nil{
+		app.errorJSON(w, errors.New("error writing audio data"))
 	}
-
-
-	app.writeJSON(w, http.StatusAccepted, payload)
+	// app.writeJSON(w, http.StatusAccepted, payload)
 }
 
