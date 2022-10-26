@@ -8,10 +8,10 @@ import (
 )
 type RequestPayload struct {
 	Action string      `json:"action"`
-	Voice  VoicePayload `json:"voice,omitempty"`
+	Speak  SpeakPayload `json:"voice,omitempty"`
 }
 
-type VoicePayload struct{
+type SpeakPayload struct{
 	Speaker int `json:"speaker"`
 	Content string `json:"content"`
 }
@@ -37,6 +37,8 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	switch requestPayload.Action {
 	case "echo":
 		app.Echo(w)
+	case "speak"
+		app.Speak(w,requestPayload.Speak)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
 		fmt.Println("unknown action")
@@ -54,4 +56,10 @@ func (app *Config) Echo(w http.ResponseWriter) {
 		panic(err)
 	}
 	fmt.Printf("http respose state %d\n",state)
+}
+
+func (app *Config) Speak(w http.ResponseWriter,a RequestPayload.Speak){
+
+
+
 }
