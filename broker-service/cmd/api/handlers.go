@@ -37,49 +37,53 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch requestPayload.Action {
-	case "voice":
-		app.Voice(w, requestPayload.Voice)
+	case "echo":
+		app.Voice(w, requestPayload.Echo)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
 	}
 }
 
+
 func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
-	// create some json we'll send to the auth microservice
-	jsonData, _ := json.MarshalIndent(a, "", "\t")
-
-	// call the service
-	request, err := http.NewRequest("POST", "http://speaker-service/speak:8080", bytes.NewBuffer(jsonData))
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-
-	client := &http.Client{}
-	response, err := client.Do(request)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-
-	defer response.Body.Close()
-
-	// make sure we get back the correct status code
-	if response.StatusCode == http.StatusUnauthorized {
-		app.errorJSON(w, errors.New("invalid credentials"))
-		return
-	} else if response.StatusCode != http.StatusAccepted {
-		app.errorJSON(w, errors.New("error calling auth service"))
-		return
-	}
-	buff :=	bytes.NewBuffer(nil)
-	if _, err := io.Copy(buff,response.Body); err != nil {
-		app.errorJSON(w,errors.New("error reading audio data"))
-		return
-	}
-	if err := ioutil.WriteFile("voicevox.wav",buff.Bytes(),0644);err != nil{
-		app.errorJSON(w, errors.New("error writing audio data"))
-	}
-	// app.writeJSON(w, http.StatusAccepted, payload)
+		
 }
+// func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
+// 	// create some json we'll send to the auth microservice
+// 	jsonData, _ := json.MarshalIndent(a, "", "\t")
+
+// 	// call the service
+// 	request, err := http.NewRequest("POST", "http://speaker-service/speak:8080", bytes.NewBuffer(jsonData))
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+
+// 	client := &http.Client{}
+// 	response, err := client.Do(request)
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+
+// 	defer response.Body.Close()
+
+// 	// make sure we get back the correct status code
+// 	if response.StatusCode == http.StatusUnauthorized {
+// 		app.errorJSON(w, errors.New("invalid credentials"))
+// 		return
+// 	} else if response.StatusCode != http.StatusAccepted {
+// 		app.errorJSON(w, errors.New("error calling auth service"))
+// 		return
+// 	}
+// 	buff :=	bytes.NewBuffer(nil)
+// 	if _, err := io.Copy(buff,response.Body); err != nil {
+// 		app.errorJSON(w,errors.New("error reading audio data"))
+// 		return
+// 	}
+// 	if err := ioutil.WriteFile("voicevox.wav",buff.Bytes(),0644);err != nil{
+// 		app.errorJSON(w, errors.New("error writing audio data"))
+// 	}
+// 	// app.writeJSON(w, http.StatusAccepted, payload)
+// }
 
