@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
-	"io"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -24,6 +22,7 @@ func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
 		Error: false,
 		Message: "Hit the broker",
 	}
+	fmt.Println("hit the broker")
 	app.writeJSON(w,http.StatusOK,payload)
 }
 
@@ -35,55 +34,24 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-
 	switch requestPayload.Action {
 	case "echo":
-		app.Voice(w, requestPayload.Echo)
+		app.Echo(w)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
+		fmt.Println("unknown action")
 	}
 }
 
 
-func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
-		
+func (app *Config) Echo(w http.ResponseWriter) {
+	bytes,err := ioutil.ReadFile("sample/audio.wav")
+	if err != nil{
+		panic(err)
+	}
+	state,err := w.Write(bytes)
+	if err != nil{
+		panic(err)
+	}
+	fmt.Printf("http respose state %d\n",state)
 }
-// func (app *Config) Voice(w http.ResponseWriter, a VoicePayload) {
-// 	// create some json we'll send to the auth microservice
-// 	jsonData, _ := json.MarshalIndent(a, "", "\t")
-
-// 	// call the service
-// 	request, err := http.NewRequest("POST", "http://speaker-service/speak:8080", bytes.NewBuffer(jsonData))
-// 	if err != nil {
-// 		app.errorJSON(w, err)
-// 		return
-// 	}
-
-// 	client := &http.Client{}
-// 	response, err := client.Do(request)
-// 	if err != nil {
-// 		app.errorJSON(w, err)
-// 		return
-// 	}
-
-// 	defer response.Body.Close()
-
-// 	// make sure we get back the correct status code
-// 	if response.StatusCode == http.StatusUnauthorized {
-// 		app.errorJSON(w, errors.New("invalid credentials"))
-// 		return
-// 	} else if response.StatusCode != http.StatusAccepted {
-// 		app.errorJSON(w, errors.New("error calling auth service"))
-// 		return
-// 	}
-// 	buff :=	bytes.NewBuffer(nil)
-// 	if _, err := io.Copy(buff,response.Body); err != nil {
-// 		app.errorJSON(w,errors.New("error reading audio data"))
-// 		return
-// 	}
-// 	if err := ioutil.WriteFile("voicevox.wav",buff.Bytes(),0644);err != nil{
-// 		app.errorJSON(w, errors.New("error writing audio data"))
-// 	}
-// 	// app.writeJSON(w, http.StatusAccepted, payload)
-// }
-
