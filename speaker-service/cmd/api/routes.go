@@ -20,7 +20,7 @@ func(app *Config) routes() http.Handler{
 	}))
 
 	mux.Use(middleware.Heartbeat("/ping"))
-	mux.Post("/",app.Echo)
+	mux.Post("/speak",app.speak)
 
 	return mux
 }

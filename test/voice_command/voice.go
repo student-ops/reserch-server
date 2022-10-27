@@ -188,8 +188,8 @@ func main() {
 			log.Fatal(err)
 		}
 	} else {
-		if err := playback(params, b[44:]); err != nil {
-			log.Fatal(err)
-		}
+		// if err := playback(params, b[44:]); err != nil {
+		// 	log.Fatal(err)
+		// }
 	}
 }

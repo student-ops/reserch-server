@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -37,7 +39,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	switch requestPayload.Action {
 	case "echo":
 		app.Echo(w)
-	case "speak"
+	case "speak":
 		app.Speak(w,requestPayload.Speak)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
@@ -57,9 +59,41 @@ func (app *Config) Echo(w http.ResponseWriter) {
 	}
 	fmt.Printf("http respose state %d\n",state)
 }
+func errhandle(err error,w http.ResponseWriter)bool{
+	if err != nil{
+		w.WriteHeader(400)
+		w.Write(nil)
+		return true
+	}
+	return false
+}
 
-func (app *Config) Speak(w http.ResponseWriter,a RequestPayload.Speak){
+func (app *Config) Speak(w http.ResponseWriter,a SpeakPayload){
+	jsonData ,_ := json.MarshalIndent(a,"","\t")
+	request,err := http.NewRequest("POST","http://speaker-service/speak",bytes.NewBuffer(jsonData))
 
-
-
+	client := &http.Client{}
+	response ,err := client.Do(request)
+	if errhandle(err,w) {
+		return
+	}
+	// make sure we get back the correct status code
+	if response.StatusCode == http.StatusUnauthorized {
+		if errhandle(err,w) {
+			return
+		}
+	} else if response.StatusCode != http.StatusAccepted {
+		if errhandle(err,w) {
+			return
+		}
+	}
+	defer response.Body.Close()
+	//it's need refacturing
+	voice ,err:= ioutil.ReadAll(response.Body)
+	if err != nil{
+		w.WriteHeader(400)
+		w.Write(nil)
+	}
+	fmt.Println(a)
+	_,err = w.Write(voice)
 }
