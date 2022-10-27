@@ -6,9 +6,9 @@ WORKDIR /app
 COPY ./go.mod .
 COPY ./go.sum .
 COPY ./cmd/api/*.go .
-RUN go build -o sepakerApp ./*.go
+RUN go build -o /app/speakerApp ./*.go
 
 FROM alpine:3.16
 
-COPY --from=builder /app/brokerApp .
+COPY --from=builder /app/speakerApp .
 CMD ["/speakerApp"]
