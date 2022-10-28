@@ -17,3 +17,10 @@ services:
       dockerfile: ./../speaker-service/speaker-service.Dockerfile
     ports:
       - "8082:8080"
+  nginx:
+    container_name: nginx
+    build: ./../nginx
+    ports:
+      - 80:80
+    depends_on:
+      - broker-service
