@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"bytes"
 	"encoding/json"
@@ -8,10 +9,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
-
-	"github.com/hajimehoshi/oto"
 )
 
 type Params struct {
@@ -129,25 +129,25 @@ func synth(cfg config, id int, params *Params) ([]byte, error) {
 	return buff.Bytes(), nil
 }
 
-func playback(params *Params, b []byte) error {
-	ch := 1
-	if params.OutputStereo {
-		ch = 2
-	}
-	ctx, err := oto.NewContext(params.OutputSamplingRate, ch, 2, 3200)
-	if err != nil {
-		return err
-	}
-	defer ctx.Close()
-	p := ctx.NewPlayer()
-	if _, err := io.Copy(p, bytes.NewReader(b)); err != nil {
-		return err
-	}
-	if err := p.Close(); err != nil {
-		return err
-	}
-	return nil
-}
+// func playback(params *Params, b []byte) error {
+// 	ch := 1
+// 	if params.OutputStereo {
+// 		ch = 2
+// 	}
+// 	ctx, err := oto.NewContext(params.OutputSamplingRate, ch, 2, 3200)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer ctx.Close()
+// 	p := ctx.NewPlayer()
+// 	if _, err := io.Copy(p, bytes.NewReader(b)); err != nil {
+// 		return err
+// 	}
+// 	if err := p.Close(); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func main() {
 	log.SetFlags(log.Lshortfile)
@@ -188,8 +188,11 @@ func main() {
 			log.Fatal(err)
 		}
 	} else {
-		// if err := playback(params, b[44:]); err != nil {
-		// 	log.Fatal(err)
-		// }
+		f , err := os.Create(cfg.output)
+		if err != nil{
+			log.Fatal(err)
+		}
+		f.Write(b)
+		f.Close()
 	}
 }
