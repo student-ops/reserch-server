@@ -40,6 +40,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	case "echo":
 		app.Echo(w)
 	case "speak":
+		fmt.Println("case speak")
 		app.Speak(w,requestPayload.Speak)
 	default:
 		app.errorJSON(w, errors.New("unknown action"))
@@ -70,7 +71,10 @@ func errhandle(err error,w http.ResponseWriter)bool{
 
 func (app *Config) Speak(w http.ResponseWriter,a SpeakPayload){
 	jsonData ,_ := json.MarshalIndent(a,"","\t")
-	request,err := http.NewRequest("POST","http://speaker-service/speak",bytes.NewBuffer(jsonData))
+	// url := "http://localhost:8080/speak"
+	url := "http://speaker-service:8080/speak"
+	request,err := http.NewRequest("POST",url,bytes.NewBuffer(jsonData))
+	request.Header.Set("Content-Type", "mp3-binary")
 
 	client := &http.Client{}
 	response ,err := client.Do(request)
@@ -91,6 +95,7 @@ func (app *Config) Speak(w http.ResponseWriter,a SpeakPayload){
 	//it's need refacturing
 	voice ,err:= ioutil.ReadAll(response.Body)
 	if err != nil{
+		fmt.Println("voice read response error")
 		w.WriteHeader(400)
 		w.Write(nil)
 	}

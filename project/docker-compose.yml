@@ -10,17 +10,11 @@ services:
       context: ./../broker-service
       dockerfile: ./../broker-service/broker-service.Dockerfile
     ports:
-      - "8081:8080"
+      - "80:8080"
   speaker-service:
+    container_name: speaker-service
     build:
       context: ./../speaker-service
       dockerfile: ./../speaker-service/speaker-service.Dockerfile
     ports:
       - "8082:8080"
-  nginx:
-    container_name: nginx
-    build: ./../nginx
-    ports:
-      - 80:80
-    depends_on:
-      - broker-service

@@ -11,4 +11,6 @@ RUN go build -o /app/speakerApp ./*.go
 FROM alpine:3.16
 
 COPY --from=builder /app/speakerApp .
+RUN mkdir /sample
+COPY sample /sample
 CMD ["/speakerApp"]
