@@ -6,6 +6,7 @@ services:
     ports:
       - "50021:50021"
   broker-service:
+    container_name: broker-service
     build:
       context: ./../broker-service
       dockerfile: ./../broker-service/broker-service.Dockerfile
