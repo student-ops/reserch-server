@@ -11,7 +11,7 @@ const webPort = "8080"
 type Config struct{}
 
 func main(){
-	app := Config{}
+	var app Config
 
 	log.Printf("Starting broker service on port %s\n",webPort)
 

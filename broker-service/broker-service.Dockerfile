@@ -1,17 +1,17 @@
 FROM golang:1.18-alpine3.16 AS builder
 
-RUN mkdir /app
+RUN mkdir /tool
 
-WORKDIR /app
+WORKDIR /tool
 
 COPY ./go.mod .
 COPY ./go.sum .
 COPY ./cmd/api/*.go .
-RUN go build -o brokerApp ./*.go
+RUN go build -o brokertool ./*.go
 
 FROM alpine:3.16
 
-COPY --from=builder /app/brokerApp .
+COPY --from=builder /tool/brokertool .
 RUN mkdir /sample
 COPY sample /sample
-CMD ["/brokerApp"]
+CMD ["/brokertool"]

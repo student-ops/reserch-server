@@ -7,7 +7,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/tsawler/toolbox"
 )
+var tools toolbox.Tools
 type RequestPayload struct {
 	Action string      `json:"action"`
 	Speak  SpeakPayload `json:"voice,omitempty"`
@@ -20,20 +23,20 @@ type SpeakPayload struct{
 
 
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
-	payload := jsonResponse{
+	payload := toolbox.JSONResponse{
 		Error: false,
 		Message: "Hit the broker",
 	}
 	fmt.Println("hit the broker")
-	app.writeJSON(w,http.StatusOK,payload)
+	_=tools.WriteJSON(w,http.StatusOK,payload)
 }
 
 func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	var requestPayload RequestPayload
 
-	err := app.readJSON(w, r, &requestPayload)
+	err := tools.WriteJSON(w,404, &requestPayload)
 	if err != nil {
-		app.errorJSON(w, err)
+		tools.ErrorJSON(w, err)
 		return
 	}
 	switch requestPayload.Action {
@@ -43,7 +46,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("case speak")
 		app.Speak(w,requestPayload.Speak)
 	default:
-		app.errorJSON(w, errors.New("unknown action"))
+		tools.ErrorJSON(w, errors.New("unknown action"))
 		fmt.Println("unknown action")
 	}
 }
