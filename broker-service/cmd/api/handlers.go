@@ -15,7 +15,7 @@ var tools toolbox.Tools
 
 type RequestPayload struct {
 	Action string       `json:"action"`
-	Speak  SpeakPayload `json:"voice,omitempty"`
+	Speak  SpeakPayload `json:"speak,omitempty"`
 }
 
 type SpeakPayload struct {

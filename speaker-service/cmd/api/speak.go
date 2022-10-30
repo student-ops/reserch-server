@@ -102,7 +102,7 @@ func synth(url string, id int, params *data.Params) ([]byte, error) {
 }
 func (app *Config) byteRecive(speakPayload *SpeakPayload) []byte {
 	var conf config
-	conf.endpoint = "http://localhost:50021"
+	conf.endpoint = "http://voicevox:50021"
 	speaker := speakPayload.Speaker
 	text := speakPayload.Content
 	fmt.Printf("byteRecive text %s", text)
