@@ -105,6 +105,7 @@ func (app *Config) byteRecive(speakPayload *SpeakPayload) []byte {
 	conf.endpoint = "http://localhost:50021"
 	speaker := speakPayload.Speaker
 	text := speakPayload.Content
+	fmt.Printf("byteRecive text %s", text)
 	params, err := getQuery(conf, speaker, text)
 	if err != nil {
 		log.Fatal(err)
