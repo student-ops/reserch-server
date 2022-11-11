@@ -12,7 +12,7 @@ services:
             context: ./../broker-service
             dockerfile: ./../broker-service/broker-service.Dockerfile
         ports:
-            - "80:8080"
+            - "8080:8080"
     speaker-service:
         container_name: speaker-service
         build:
