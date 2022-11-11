@@ -1,22 +1,22 @@
 version: "3"
 
 services:
-  voicevox:
-    container_name: voicevox
-    image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
-    ports:
-      - "50021:50021"
-  broker-service:
-    container_name: broker-service
-    build:
-      context: ./../broker-service
-      dockerfile: ./../broker-service/broker-service.Dockerfile
-    ports:
-      - "80:8080"
-  speaker-service:
-    container_name: speaker-service
-    build:
-      context: ./../speaker-service
-      dockerfile: ./../speaker-service/speaker-service.Dockerfile
-    ports:
-      - "8082:8080"
+    voicevox:
+        container_name: voicevox
+        image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
+        ports:
+            - "50021:50021"
+    broker-service:
+        container_name: broker-service
+        build:
+            context: ./../broker-service
+            dockerfile: ./../broker-service/broker-service.Dockerfile
+        ports:
+            - "8080:8080"
+    speaker-service:
+        container_name: speaker-service
+        build:
+            context: ./../speaker-service
+            dockerfile: ./../speaker-service/speaker-service.Dockerfile
+        ports:
+            - "8082:8080"
