@@ -14,8 +14,9 @@ import (
 var tools toolbox.Tools
 
 type RequestPayload struct {
-	Action string       `json:"action"`
-	Speak  SpeakPayload `json:"speak,omitempty"`
+	Action       string               `json:"action"`
+	Speak        SpeakPayload         `json:"speak,omitempty"`
+	Surroundings SurroundingsPalyload `json:"surroundings,omitempty`
 }
 
 type SpeakPayload struct {
@@ -23,7 +24,7 @@ type SpeakPayload struct {
 	Content string `json:"content"`
 }
 
-type Surroundings struct {
+type SurroundingsPalyload struct {
 	Tempreture int `json:"tempreture"`
 }
 
@@ -49,10 +50,16 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		app.Echo(w)
 	case "speak":
 		fmt.Println("case speak")
-		app.Speak(w, requestPayload.Speak)
+		err = app.Speak(w, requestPayload.Speak)
+		if err != nil {
+			http.Error(w, "speak error", 401)
+		}
 	case "surroundings":
 		fmt.Println("case surroundings")
-		app.surroundingsStore(w, requestPayload.Surroundings)
+		err = app.SurroundingsStore(w, requestPayload.Surroundings)
+		if err != nil {
+			http.Error(w, "surroudings error", 402)
+		}
 	default:
 		tools.ErrorJSON(w, errors.New("unknown action"))
 		fmt.Println("unknown action")
@@ -78,11 +85,12 @@ func errhandle(err error, w http.ResponseWriter) bool {
 	}
 	return false
 }
-func (app *Config) Surroundings(w http.ResponseWriter, p SurroundingsPayload) {
-	return
+func (app *Config) SurroundingsStore(w http.ResponseWriter, p SurroundingsPalyload) error {
+	return nil
 }
 
-func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) {
+// needs erorr handlin
+func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) error {
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
 	// url := "http://localhost:8080/speak"
 	url := "http://speaker-service:8080/speak"
@@ -92,26 +100,23 @@ func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if errhandle(err, w) {
-		return
+		return err
 	}
 	// make sure we get back the correct status code
 	if response.StatusCode == http.StatusUnauthorized {
-		if errhandle(err, w) {
-			return
-		}
+		return err
 	} else if response.StatusCode != http.StatusAccepted {
-		if errhandle(err, w) {
-			return
-		}
+		return nil
 	}
-	defer response.Body.Close()
-	//it's need refacturing
+	//it's need refacturing	defer response.Body.Close()
 	voice, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("voice read response error")
-		w.WriteHeader(400)
-		w.Write(nil)
+		return err
 	}
 	fmt.Println(a)
 	_, err = w.Write(voice)
+	if err != nil {
+		return err
+	}
+	return nil
 }
