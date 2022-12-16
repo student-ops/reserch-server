@@ -23,6 +23,10 @@ type SpeakPayload struct {
 	Content string `json:"content"`
 }
 
+type Surroundings struct {
+	Tempreture int `json:"tempreture"`
+}
+
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
 	payload := toolbox.JSONResponse{
 		Error:   false,
@@ -46,6 +50,9 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	case "speak":
 		fmt.Println("case speak")
 		app.Speak(w, requestPayload.Speak)
+	case "surroundings":
+		fmt.Println("case surroundings")
+		app.surroundingsStore(w, requestPayload.Surroundings)
 	default:
 		tools.ErrorJSON(w, errors.New("unknown action"))
 		fmt.Println("unknown action")
@@ -70,6 +77,9 @@ func errhandle(err error, w http.ResponseWriter) bool {
 		return true
 	}
 	return false
+}
+func (app *Config) Surroundings(w http.ResponseWriter, p SurroundingsPayload) {
+	return
 }
 
 func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) {
