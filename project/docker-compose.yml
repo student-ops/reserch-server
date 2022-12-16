@@ -1,6 +1,26 @@
 version: "3"
 
 services:
+    postgres:
+        image: postgres:14
+        container_name: reserch_postgres
+        ports:
+            - 5432:5432
+        volumes:
+            - postgres-store:/var/lib/postgresql/data
+            - ./postgresql/script:/docker-entrypoint-initdb.d
+        environment:
+            - POSTGRES_PASSWORD=passward
+    mongo:
+        image: mongo:4.4.6
+        container_name: reserch_monogo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
+        ports:
+            - 27017:27017
+        volumes:
+            - mongo-store:/data/db
     voicevox:
         container_name: voicevox
         image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
@@ -20,3 +40,6 @@ services:
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         # ports:
         #   - "8082:8080"
+volumes:
+    postgres-store:
+    mongo-store:
