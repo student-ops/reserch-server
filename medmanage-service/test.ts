@@ -10,7 +10,7 @@ async function main() {
         data: {
             user_id: 1,
             state: true,
-            name: "ステロイド",
+            name: "成長ホルモン",
         },
     })
     const allUsers = await prisma.med_schedule.findMany({})
