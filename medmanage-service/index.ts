@@ -2,6 +2,7 @@ import express from "express"
 const app: express.Express = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+import * as DbInquire from "./db-inquire"
 
 //CROS対応（というか完全無防備：本番環境ではだめ絶対）
 app.use(
@@ -27,13 +28,23 @@ type User = {
     email: string
 }
 
-const users: User[] = [
-    { id: 1, name: "User1", email: "user1@test.local" },
-    { id: 2, name: "User2", email: "user2@test.local" },
-    { id: 3, name: "User3", email: "user3@test.local" },
-]
+type Taken = {
+    time: number
+    medicine: string
+}
 
 //一覧取得
-app.get("/users", (req: express.Request, res: express.Response) => {
-    res.send(JSON.stringify(users))
+
+// app.get("/tody", (req: express.Request, res: express.Response) => {
+//     // res.send(JSON.stringify(taken_tody))
+// })
+
+app.post("/data", (req: express.Request, res: express.Response) => {
+    console.log(req.body.name)
+    res.sendStatus(200)
+})
+
+app.get("/takemed", (req: express.Request, res: express.Response) => {
+    let message = DbInquire.takeMedicine(1)
+    res.send(message)
 })

@@ -3,10 +3,9 @@ generator client {
 }
 
 datasource db {
-
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl= env("SHADOWDB_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOWDB_URL")
 }
 
 model User {
@@ -16,9 +15,11 @@ model User {
 }
 
 model med_schedule {
-  id      Int     @id @default(autoincrement())
-  user_id Int
-  state   Boolean
-  name    String
-  drinker User    @relation(fields: [user_id], references: [id])
+  id         Int     @id @default(autoincrement())
+  user_id    Int
+  state      Boolean
+  taken_day  Int
+  taken_time Int
+  name       String
+  drinker    User    @relation(fields: [user_id], references: [id])
 }
