@@ -2,15 +2,15 @@ import { med_schedule, PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 async function selectMed(id: number) {
-    const fetched = prisma.med_schedule.findMany({
+    const fetched = await prisma.med_schedule.findMany({
         where: {
             state: true,
-            user_id: 1,
+            user_id: id,
         },
     })
+    prisma.$disconnect()
     return fetched
 }
-
 function medcineQuote(
     fetched: med_schedule[],
     date: number,
@@ -39,7 +39,6 @@ function medcineQuote(
             if (fetched[i].taken_time == time) {
                 sentence = fetched[i].name + "と"
                 quote += sentence
-                console.log("hit")
                 flug++
             }
         }
@@ -52,10 +51,9 @@ function medcineQuote(
     }
     return quote
 }
-
-export function takeMedicine(id: number): string {
+export async function getMessage(id: number) {
     let now_h = new Date().getHours()
-    let date = new Date().getDay()
+    let date = 1 << new Date().getDay()
     let time_zone: number
     if (now_h < 8) {
         time_zone = 0
@@ -64,19 +62,12 @@ export function takeMedicine(id: number): string {
     } else if (now_h < 21) {
         time_zone = 2
     } else {
-        date++
+        date << 1
         time_zone = 0
     }
-    let schedule: med_schedule[] = []
-    selectMed(id)
-        .then(async (fetched) => {
-            await prisma.$disconnect()
-            schedule = fetched
-        })
-        .catch(async () => {
-            return "データベースに接続できません"
-        })
-
-    let message = medcineQuote(schedule, date, time_zone)
+    console.log("date:" + date + "time:" + time_zone)
+    let fetched = await selectMed(1)
+    let message = medcineQuote(fetched, date, time_zone)
+    console.log(message)
     return message
 }

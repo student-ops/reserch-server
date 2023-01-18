@@ -33,18 +33,12 @@ type Taken = {
     medicine: string
 }
 
-//一覧取得
-
-// app.get("/tody", (req: express.Request, res: express.Response) => {
-//     // res.send(JSON.stringify(taken_tody))
-// })
-
 app.post("/data", (req: express.Request, res: express.Response) => {
     console.log(req.body.name)
     res.sendStatus(200)
 })
 
-app.get("/takemed", (req: express.Request, res: express.Response) => {
-    let message = DbInquire.takeMedicine(1)
+app.get("/takemed", async (req: express.Request, res: express.Response) => {
+    const message = await DbInquire.getMessage(parseInt(req.params.id))
     res.send(message)
 })

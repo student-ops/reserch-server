@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 let everyday: number = (1 << 7) - 1
-let onry_wed: number = 1 << 3
-let mon_wed_sun: number = 2 + (1 << 3) + 1
+let onry_wed: number = 1 << 4
+let mon_wed_sun: number = 2 + (1 << 4) + 1
 const med_data = [
     {
         user_id: 1,
@@ -25,6 +25,20 @@ const med_data = [
         taken_day: onry_wed,
         taken_time: 2,
         name: "ステロイド",
+    },
+    {
+        user_id: 1,
+        state: true,
+        taken_day: everyday,
+        taken_time: 0,
+        name: "ロキソニン",
+    },
+    {
+        user_id: 1,
+        state: true,
+        taken_day: everyday,
+        taken_time: 0,
+        name: "パブロン",
     },
 ]
 async function insertMedicenData() {
