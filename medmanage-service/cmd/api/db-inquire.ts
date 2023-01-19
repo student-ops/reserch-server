@@ -52,7 +52,7 @@ function medcineQuote(
     return quote
 }
 export async function getMessage(id: number) {
-    let now_h = new Date().getHours()
+    let now_h = new Date().getHours() + 9
     let date = 1 << new Date().getDay()
     let time_zone: number
     if (now_h < 8) {
@@ -65,7 +65,7 @@ export async function getMessage(id: number) {
         date << 1
         time_zone = 0
     }
-    console.log("date:" + date + "time:" + time_zone)
+    console.log("date:" + date + " time:" + now_h)
     let fetched = await selectMed(1)
     let message = medcineQuote(fetched, date, time_zone)
     console.log(message)

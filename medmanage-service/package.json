@@ -1,23 +1,25 @@
 {
-  "name": "medmanage-service",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/express": "^4.17.15",
-    "@types/node": "^18.11.18",
-    "express": "^4.18.2",
-    "prisma": "^4.8.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
-  },
-  "dependencies": {
-    "@prisma/client": "^4.8.1"
-  }
+    "name": "medmanage-service",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "npx ts-node ./cmd/api/index.ts",
+        "ini": "npx ts-node ./cmd/api/insert-data.ts && npm run start",
+        "start:migrate:prod": "npx prisma migrate deploy && npm run ini"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.17.15",
+        "@types/node": "^18.11.18",
+        "express": "^4.18.2",
+        "prisma": "^4.8.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.8.1"
+    }
 }
