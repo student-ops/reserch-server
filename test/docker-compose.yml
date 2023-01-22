@@ -12,10 +12,10 @@ services:
         environment:
             - POSTGRES_PASSWORD=passward
     med-manage:
-        container_name: med-manage
+        container_name: test_medmanage
         build:
-            context: ../medmanage-service
-            dockerfile: ../medmanage-service/Dockerfile
+            context: ../medicine-api
+            dockerfile: ../medicine-api/Dockerfile
         ports:
             - "3000:3000"
             - "5555:5555"
