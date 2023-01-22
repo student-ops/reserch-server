@@ -3,7 +3,7 @@ const prisma = new PrismaClient()
 
 let everyday: number = (1 << 7) - 1
 let onry_wed: number = 1 << 4
-let mon_wed_sun: number = 2 + (1 << 4) + 1
+let sun_mon_wed: number = 1 + 2 + (1 << 4)
 const med_data = [
     {
         user_id: 1,
@@ -15,7 +15,7 @@ const med_data = [
     {
         user_id: 1,
         state: true,
-        taken_day: mon_wed_sun,
+        taken_day: sun_mon_wed,
         taken_time: 2,
         name: "カロナール",
     },

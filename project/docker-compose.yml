@@ -30,11 +30,11 @@ services:
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         # ports:
         #   - "8082:8080"
-    med-manage:
-        container_name: med-manage
+    medicine-api:
+        container_name: medmanage_service
         build:
-            context: ../medmanage-service
-            dockerfile: ../medmanage-service/Dockerfile
+            context: ../medicine-api
+            dockerfile: ../medicine-api/Dockerfile
         ports:
             - "3000:3000"
             - "5555:5555"
