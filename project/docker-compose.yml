@@ -11,16 +11,6 @@ services:
             - ./postgresql/conf:/docker-entrypoint-initdb.d
         environment:
             - POSTGRES_PASSWORD=passward
-    mongo:
-        mongo:
-        container_name: mongo
-        image: mongo:4
-        command: --replSet rs0
-        ports:
-            - "27017:27017"
-            - "28017:28017"
-        volumes:
-            - ../mongodb/mongo:/data/dbc
     voicevox:
         container_name: voicevox
         image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
@@ -41,7 +31,7 @@ services:
         # ports:
         #   - "8082:8080"
     medicine-api:
-        container_name: test_medmanage
+        container_name: medmanage_service
         build:
             context: ../medicine-api
             dockerfile: ../medicine-api/Dockerfile
@@ -51,7 +41,7 @@ services:
         depends_on:
             - postgres
         environment:
-            - DATABASE_URL=postgresql://postgres:passward@test_postgres:5432/medmanage?schema=public
+            - DATABASE_URL=postgresql://postgres:passward@reserch_postgres:5432/medmanage?schema=public
 volumes:
     postgres-store:
     mongo-store:

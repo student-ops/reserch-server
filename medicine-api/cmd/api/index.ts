@@ -39,6 +39,9 @@ app.post("/data", (req: express.Request, res: express.Response) => {
 })
 
 app.get("/takemed", async (req: express.Request, res: express.Response) => {
-    const message = await DbInquire.getMessage(parseInt(req.params.id))
+    const id: string = req.query.id as string
+    console.log("id value = " + id + " type = " + typeof id)
+
+    const message = await DbInquire.getMessage(parseInt(id))
     res.send(message)
 })

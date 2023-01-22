@@ -1,4 +1,5 @@
 import { med_schedule, PrismaClient } from "@prisma/client"
+import { time } from "console"
 const prisma = new PrismaClient()
 
 async function selectMed(id: number) {
@@ -52,7 +53,8 @@ function medcineQuote(
     return quote
 }
 export async function getMessage(id: number) {
-    let now_h = new Date().getHours() + 9
+    let now = new Date()
+    let now_h = now.getHours() + (now.getTimezoneOffset() + 540) / -60
     let date = 1 << new Date().getDay()
     let time_zone: number
     if (now_h < 8) {
@@ -65,8 +67,8 @@ export async function getMessage(id: number) {
         date << 1
         time_zone = 0
     }
-    console.log("date:" + date + " time:" + now_h)
-    let fetched = await selectMed(1)
+    let fetched = await selectMed(id)
+    console.log("date = " + date + "time = " + now_h)
     let message = medcineQuote(fetched, date, time_zone)
     console.log(message)
     return message
