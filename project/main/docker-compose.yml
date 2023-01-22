@@ -7,7 +7,7 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - postgres-store:/var/lib/postgresql/data
+            # - postgres-store:/var/lib/postgresql/data
             - ./postgresql/conf:/docker-entrypoint-initdb.d
         environment:
             - POSTGRES_PASSWORD=passward
@@ -40,6 +40,18 @@ services:
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         # ports:
         #   - "8082:8080"
+    medicine-api:
+        container_name: test_medmanage
+        build:
+            context: ../medicine-api
+            dockerfile: ../medicine-api/Dockerfile
+        ports:
+            - "3000:3000"
+            - "5555:5555"
+        depends_on:
+            - postgres
+        environment:
+            - DATABASE_URL=postgresql://postgres:passward@test_postgres:5432/medmanage?schema=public
 volumes:
     postgres-store:
     mongo-store:
