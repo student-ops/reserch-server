@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+    mongo:
+        container_name: mongo
+        image: mongo:4
+        command: --replSet rs0
+        ports:
+            - "27017:27017"
+            - "28017:28017"
+        environment:
+            - name=value
+        # volumes:
+        #     - ./data/mongo:/data/db
+    prisma_mongo:
+        container_name: prisma_mongo_test
+        build:
+            dockerfile: ../mongo/Dockerfile
+            context: ../mongo
+        environment:
+            - DATABASE_URL=mongodb://root:prisma@mongo:27017/prisma-mongo?authSource=admin
+        # networks:
+        #     - default
+        #     - test
+        tty: true
+        depends_on:
+            - mongo
+# networks:
+#     test:
+#         external: true

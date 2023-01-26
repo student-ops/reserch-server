@@ -3,12 +3,13 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 async function main() {
-    // await prisma.test.create({
-    //     data: {
-    //         id: 2,
-    //         name: "rakky",
-    //     },
-    // })
+    await prisma.test.create({
+        data: {
+            id: 3,
+            device_id: 3,
+            name: "sakamoto",
+        },
+    })
     const test_data = await prisma.test.findMany()
     console.dir(test_data)
 }

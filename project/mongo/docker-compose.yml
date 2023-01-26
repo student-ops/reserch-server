@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+    prisma_mongo:
+        container_name: prisma_mongo_test
+        build:
+            dockerfile: ./Dockerfile
+        environment:
+            - DATABASE_URL=mongodb://root:prisma@172.19.0.2:27017/prisma-mongo?authSource=admin
+        networks:
+            - default
+            - test
+        tty: true
+
+networks:
+    test:
+        external: true

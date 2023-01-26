@@ -1,5 +1,6 @@
 BROKER_BINARY=brokerApp
-AUTH_BINARY=authApp## up: starts all containers in the background without forcing build
+MONGO
+
 refresh:
 	@echo "refreshing"
 up:
