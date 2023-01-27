@@ -53,7 +53,7 @@ func (app *Config) Speak(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getQuery(conf config, id int, text string) (*data.Params, error) {
+func getQuery(conf config, id int, text string) (*data.Params, ...error) {
 	req, err := http.NewRequest("POST", conf.endpoint+"/audio_query", nil)
 	if err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func getQuery(conf config, id int, text string) (*data.Params, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&params); err != nil {
 		return nil, err
 	}
-	return params, nil
+	return params
 }
 
 func synth(url string, id int, params *data.Params) ([]byte, error) {
