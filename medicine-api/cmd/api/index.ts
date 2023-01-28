@@ -18,8 +18,9 @@ app.use(
     }
 )
 
-app.listen(3000, () => {
-    console.log("Start on port 3000.")
+const port: number = 8080
+app.listen(port, () => {
+    console.log("Start on port" + port)
 })
 
 type User = {
@@ -33,15 +34,24 @@ type Taken = {
     medicine: string
 }
 
-app.post("/data", (req: express.Request, res: express.Response) => {
-    console.log(req.body.name)
+app.get("/ping", async (req: express.Request, res: express.Response) => {
+    console.log("reached ping")
     res.sendStatus(200)
 })
 
-app.get("/takemed", async (req: express.Request, res: express.Response) => {
-    const id: string = req.query.id as string
-    console.log("id value = " + id + " type = " + typeof id)
+app.post("/json", async (req: express.Request, res: express.Response) => {
+    console.log(req.body.id)
+    res.sendStatus(200)
+})
 
+app.post("/takemed", async (req: express.Request, res: express.Response) => {
+    var id: string = req.body.id
     const message = await DbInquire.getMessage(parseInt(id))
-    res.send(message)
+    type TakemedRespones = {
+        message: string
+    }
+    var respmessage: TakemedRespones = {
+        message: message,
+    }
+    res.status(200).send(respmessage)
 })

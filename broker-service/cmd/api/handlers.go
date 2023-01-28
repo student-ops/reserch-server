@@ -17,6 +17,7 @@ type RequestPayload struct {
 	Action       string               `json:"action"`
 	Speak        SpeakPayload         `json:"speak,omitempty"`
 	Surroundings SurroundingsPalyload `json:"surroundings,omitempty`
+	Takemed      TakemedPayload       `json:"takemed,omitempty`
 }
 
 type SpeakPayload struct {
@@ -26,6 +27,10 @@ type SpeakPayload struct {
 
 type SurroundingsPalyload struct {
 	Tempreture int `json:"tempreture"`
+}
+
+type TakemedPayload struct {
+	UserId int `json:"userid"`
 }
 
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +65,13 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "surroudings error", 402)
 		}
+
+	case "takemed":
+		fmt.Println("case takemed")
+		err = app.Takemed(w, requestPayload.Takemed)
+		if err != nil {
+			http.Error(w, "takemed error")
+		}
 	default:
 		tools.ErrorJSON(w, errors.New("unknown action"))
 		fmt.Println("unknown action")
@@ -85,11 +97,11 @@ func errhandle(err error, w http.ResponseWriter) bool {
 	}
 	return false
 }
-func (app *Config) SurroundingsStore(w http.ResponseWriter, p SurroundingsPalyload) error {
+func (app *Config) SurroundingsStore(w http.ResponseWriter, a SurroundingsPalyload) error {
 	return nil
 }
 
-// needs erorr handlin
+// needs erorr handling
 func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) error {
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
 	// url := "http://localhost:8080/speak"
