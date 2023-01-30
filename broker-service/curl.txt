@@ -1,0 +1,1 @@
+curl -X POST  localhost:8080/handle -d '{"action" : "takemed","takemed":{"userid":1}}'

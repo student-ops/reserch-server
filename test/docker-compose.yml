@@ -12,7 +12,6 @@ services:
         environment:
             - POSTGRES_PASSWORD=passward
     med-manage:
-        container_name: test_medmanage
         build:
             context: ../medicine-api
             dockerfile: ../medicine-api/Dockerfile

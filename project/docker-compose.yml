@@ -28,10 +28,10 @@ services:
         build:
             context: ./../speaker-service
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
-        # ports:
-        #   - "8082:8080"
+        ports:
+            - "8082:8080"
     medicine-api:
-        container_name: medmanage_service
+        container_name: medicine-api
         build:
             context: ../medicine-api
             dockerfile: ../medicine-api/Dockerfile

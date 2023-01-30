@@ -16,8 +16,8 @@ var tools toolbox.Tools
 type RequestPayload struct {
 	Action       string               `json:"action"`
 	Speak        SpeakPayload         `json:"speak,omitempty"`
-	Surroundings SurroundingsPalyload `json:"surroundings,omitempty`
-	Takemed      TakemedPayload       `json:"takemed,omitempty`
+	Surroundings SurroundingsPalyload `json:"surroundings,omitempty"`
+	Takemed      TakemedPayload       `json:"takemed,omitempty"`
 }
 
 type SpeakPayload struct {
@@ -50,27 +50,25 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		tools.ErrorJSON(w, err)
 		return
 	}
+	fmt.Printf("action %s\n", requestPayload.Action)
 	switch requestPayload.Action {
 	case "echo":
 		app.Echo(w)
 	case "speak":
-		fmt.Println("case speak")
 		err = app.Speak(w, requestPayload.Speak)
 		if err != nil {
 			http.Error(w, "speak error", 401)
 		}
 	case "surroundings":
-		fmt.Println("case surroundings")
 		err = app.SurroundingsStore(w, requestPayload.Surroundings)
 		if err != nil {
 			http.Error(w, "surroudings error", 402)
 		}
 
 	case "takemed":
-		fmt.Println("case takemed")
-		err = app.Takemed(w, requestPayload.Takemed)
+		err = app.Takemed(w, r, requestPayload.Takemed)
 		if err != nil {
-			http.Error(w, "takemed error")
+			http.Error(w, "takemed error", 402)
 		}
 	default:
 		tools.ErrorJSON(w, errors.New("unknown action"))
@@ -117,10 +115,8 @@ func (app *Config) Speak(w http.ResponseWriter, a SpeakPayload) error {
 	// make sure we get back the correct status code
 	if response.StatusCode == http.StatusUnauthorized {
 		return err
-	} else if response.StatusCode != http.StatusAccepted {
-		return nil
-	}
-	//it's need refacturing	defer response.Body.Close()
+	} //it's need refacturing	defer response.Body.Close()
+	defer response.Body.Close()
 	voice, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err

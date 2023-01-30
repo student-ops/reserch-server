@@ -21,7 +21,6 @@ func (app *Config) routes() http.Handler {
 
 	mux.Use(middleware.Heartbeat("/ping"))
 	mux.Post("/speak", app.Speak)
-	mux.POST("/data"app.DataStore)
 
 	return mux
 }

@@ -18,10 +18,14 @@ app.use(
     }
 )
 
-const port: number = 8080
+const port: number = 3000
 app.listen(port, () => {
     console.log("Start on port" + port)
 })
+
+// type TakemedPayload{
+//     userid :number
+// }
 
 type User = {
     id: number
@@ -40,12 +44,12 @@ app.get("/ping", async (req: express.Request, res: express.Response) => {
 })
 
 app.post("/json", async (req: express.Request, res: express.Response) => {
-    console.log(req.body.id)
+    console.log(req.body)
     res.sendStatus(200)
 })
 
 app.post("/takemed", async (req: express.Request, res: express.Response) => {
-    var id: string = req.body.id
+    var id: string = req.body.userid
     const message = await DbInquire.getMessage(parseInt(id))
     type TakemedRespones = {
         message: string
