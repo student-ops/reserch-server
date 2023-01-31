@@ -9,6 +9,6 @@ COPY *.json ./
 COPY ./prisma /usr/app/prisma
 RUN npm install
 ## warning
-RUN npx prisma generate
+# RUN npx prisma generate
 
 CMD ["npm", "run","start:migrate:prod"]

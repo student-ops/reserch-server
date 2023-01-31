@@ -2,6 +2,12 @@ import { med_schedule, PrismaClient } from "@prisma/client"
 import { time } from "console"
 const prisma = new PrismaClient()
 
+export async function selectAll() {
+    const fetched = await prisma.med_schedule.findMany({})
+    console.log(fetched)
+    return fetched
+}
+
 async function selectMed(id: number) {
     const fetched = await prisma.med_schedule.findMany({
         where: {

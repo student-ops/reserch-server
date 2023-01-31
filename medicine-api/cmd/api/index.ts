@@ -48,6 +48,12 @@ app.post("/json", async (req: express.Request, res: express.Response) => {
     res.sendStatus(200)
 })
 
+//for test
+app.get("/select-all", async (req: express.Request, res: express.Response) => {
+    const fetched = await DbInquire.selectAll()
+    res.status(200).send(fetched)
+})
+
 app.post("/takemed", async (req: express.Request, res: express.Response) => {
     var id: string = req.body.userid
     const message = await DbInquire.getMessage(parseInt(id))

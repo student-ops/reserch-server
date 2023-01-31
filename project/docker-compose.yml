@@ -1,16 +1,6 @@
 version: "3"
 
 services:
-    postgres:
-        image: postgres:14
-        container_name: reserch_postgres
-        ports:
-            - 5432:5432
-        volumes:
-            # - postgres-store:/var/lib/postgresql/data
-            - ./postgresql/conf:/docker-entrypoint-initdb.d
-        environment:
-            - POSTGRES_PASSWORD=passward
     voicevox:
         container_name: voicevox
         image: "voicevox/voicevox_engine:cpu-ubuntu20.04-latest"
@@ -38,7 +28,11 @@ services:
         ports:
             - "3000:3000"
             - "5555:5555"
-        depends_on:
-            - postgres
+        networks:
+            - service_db
         environment:
-            - DATABASE_URL=postgresql://postgres:passward@reserch_postgres:5432/medmanage?schema=public
+            - DATABASE_URL=postgresql://postgres:passward@postgres:5432/medmanage?schema=public
+
+networks:
+    service_db:
+        external: true
