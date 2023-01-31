@@ -19,7 +19,7 @@ services:
             context: ./../speaker-service
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         ports:
-            - "8082:8080"
+            - "8081:8080"
     medicine-api:
         container_name: medicine-api
         build:
@@ -30,6 +30,7 @@ services:
             - "5555:5555"
         networks:
             - service_db
+            - default
         environment:
             - DATABASE_URL=postgresql://postgres:passward@postgres:5432/medmanage?schema=public
 

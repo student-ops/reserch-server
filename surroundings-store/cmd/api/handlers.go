@@ -47,7 +47,6 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 
 	err := tools.ReadJSON(w, r, &requestPayload)
 	if err != nil {
-		fmt.Println(err)
 		tools.ErrorJSON(w, err)
 		return
 	}
@@ -58,20 +57,17 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	case "speak":
 		err = app.Speak(w, requestPayload.Speak)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, "speak error", 401)
 		}
 	case "surroundings":
 		err = app.SurroundingsStore(w, requestPayload.Surroundings)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, "surroudings error", 402)
 		}
 
 	case "takemed":
 		err = app.Takemed(w, r, requestPayload.Takemed)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, "takemed error", 402)
 		}
 	default:

@@ -17,10 +17,6 @@ func (app *Config) Takemed(w http.ResponseWriter, r *http.Request, a TakemedPayl
 		return err
 	}
 	request.Header.Set("Content-Type", "application/json")
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
 	type Takemedresp struct {
 		Message string
 	}
@@ -28,6 +24,9 @@ func (app *Config) Takemed(w http.ResponseWriter, r *http.Request, a TakemedPayl
 
 	client := &http.Client{}
 	response, err := client.Do(request)
+	if err != nil {
+		return err
+	}
 	// err = tools.ReadJSON(w, request, &takemedMessage)
 	json.NewDecoder(response.Body).Decode(&tmr)
 
