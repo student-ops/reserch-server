@@ -1,29 +1,36 @@
 version: "3.7"
 services:
-    mongo:
-        container_name: mongo
-        image: mongo:4
-        command: --replSet rs0
+    postgres:
+        image: postgres:14
+        container_name: postgres
         ports:
-            - "27017:27017"
-            - "28017:28017"
+            - 5432:5432
+        volumes:
+            - ./postgresql/conf:/docker-entrypoint-initdb.d
         environment:
-            - name=value
-        # volumes:
-        #     - ./data/mongo:/data/db
-    prisma_mongo:
-        container_name: prisma_mongo_test
-        build:
-            dockerfile: ../mongo/Dockerfile
-            context: ../mongo
+            - POSTGRES_PASSWORD=passward
+    mongo:
+        image: mongo
+        container_name: mongo
+        restart: always
         environment:
-            - DATABASE_URL=mongodb://root:prisma@mongo:27017/prisma-mongo?authSource=admin
-        # networks:
-        #     - default
-        #     - test
-        tty: true
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
+            MONGO_INITDB_DATABASE: test
+            TZ: Asia/Tokyo
+        ports:
+            - 27017:27017
+        volumes:
+            - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    mongo-express:
+        image: mongo-express
+        container_name: mongo_express
+        restart: always
+        ports:
+            - 2000:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: password
+            ME_CONFIG_MONGODB_SERVER: mongo
         depends_on:
             - mongo
-# networks:
-#     test:
-#         external: true

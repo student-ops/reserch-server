@@ -1,4 +1,4 @@
-port
+## port まとめ
 
 go server 8080 ~ 8082
 
@@ -8,3 +8,7 @@ postgres 5432
 prisma studio 5555
 
 mongo 27017
+
+## リファクタリング
+
+medicine api のサーバの recive 制限が必要。

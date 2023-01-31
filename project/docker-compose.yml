@@ -42,6 +42,3 @@ services:
             - postgres
         environment:
             - DATABASE_URL=postgresql://postgres:passward@reserch_postgres:5432/medmanage?schema=public
-volumes:
-    postgres-store:
-    mongo-store:
