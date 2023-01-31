@@ -3,7 +3,6 @@ package dbmanage
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,10 +10,10 @@ import (
 )
 
 type Surroundings struct {
-	DeviceId    int
-	Tempreture  float32
-	Airpressure float32
-	Date        time.Time
+	DeviceId    int       `json:"device_id"`
+	Tempreture  float32   `json:"tempreture"`
+	Airpressure float32   `json:"air_pressure"`
+	Date        time.Time `json:"date"`
 }
 
 func DbConnection() (err error, client *mongo.Client) {
@@ -24,7 +23,7 @@ func DbConnection() (err error, client *mongo.Client) {
 	cred.Password = "password"
 	// Rest of the code will go here
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(cred)
+	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017").SetAuth(cred)
 
 	// Connect to MongoDB
 	client, err = mongo.Connect(context.TODO(), clientOptions)
@@ -44,13 +43,14 @@ func DbConnection() (err error, client *mongo.Client) {
 	return err, client
 }
 
-func InsertSurroundings(client *mongo.Client, data Surroundings) {
+func InsertSurroundings(client *mongo.Client, data Surroundings) error {
 	collection := client.Database("test").Collection("surroundings")
 
 	insertResult, err := collection.InsertOne(context.TODO(), data)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
+	return nil
 }

@@ -19,7 +19,7 @@ func main() {
 		temp := 10 + 20*rand.Float32()
 		airp := 1000 + 20*rand.Float32()
 		fmt.Println(now)
-		d := dbmanage.Surroundings{1, temp, airp, now}
+		d := dbmanage.Surroundings{DeviceId: 1, Tempreture: temp, Airpressure: airp, Date: now}
 		dbmanage.InsertSurroundings(client, d)
 	}
 }

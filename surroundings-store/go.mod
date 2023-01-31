@@ -2,7 +2,12 @@ module main
 
 go 1.19
 
-require go.mongodb.org/mongo-driver v1.11.1
+require (
+	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/cors v1.2.1
+	github.com/tsawler/toolbox v1.1.7
+	go.mongodb.org/mongo-driver v1.11.1
+)
 
 require (
 	github.com/golang/snappy v0.0.1 // indirect
