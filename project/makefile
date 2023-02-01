@@ -12,6 +12,7 @@ database_up:
 	docker-compose -f ./database/docker-compose.yml up -d
 
 database_build:
+	docker-compose -f ./database/docker-compose.yml down
 	@echo "Building (when required) and starting docker images..."
 	docker-compose -f ./database/docker-compose.yml up --build -d
 	@echo "database iamges built and strted!"
@@ -25,7 +26,6 @@ up_build: database_build
 	@echo "Docker images built and started!"
 
 ## down: stop docker compose
-
 down:
 	@echo "Stopping docker compose..."
 	docker-compose down
