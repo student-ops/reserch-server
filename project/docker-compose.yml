@@ -20,6 +20,16 @@ services:
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         ports:
             - "8081:8080"
+    surroundings-store:
+        container_name: surroundings-store
+        build:
+            context: ../surroundings-store
+            dockerfile: ../surroundings-store/surroundings-store.Dockerfile
+        ports:
+            - "9000:9000"
+        networks:
+            - service_db
+            - default
     medicine-api:
         container_name: medicine-api
         build:
@@ -33,7 +43,6 @@ services:
             - default
         environment:
             - DATABASE_URL=postgresql://postgres:passward@postgres:5432/medmanage?schema=public
-
 networks:
     service_db:
         external: true

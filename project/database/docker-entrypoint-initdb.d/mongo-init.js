@@ -6,7 +6,7 @@ db.createUser({
     roles: [{ role: "readWrite", db: "test" }],
 })
 
-db.createCollection("surroundigs")
+db.createCollection("surroundings")
 db.surroundings.insertMany([
     {
         temp: "13",

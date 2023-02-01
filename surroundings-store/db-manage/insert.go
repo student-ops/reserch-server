@@ -17,6 +17,7 @@ type Surroundings struct {
 }
 
 func DbConnection() (err error, client *mongo.Client) {
+	fmt.Println("reach dbconnection")
 	var cred options.Credential
 	cred.AuthSource = "admin"
 	cred.Username = "root"

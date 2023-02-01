@@ -24,6 +24,9 @@ services:
             - 27017:27017
         volumes:
             - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        networks:
+            - service_db
+            - default
     mongo-express:
         image: mongo-express
         container_name: mongo_express
