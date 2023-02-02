@@ -2,45 +2,42 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
-	"log"
+	"fmt"
+	"io/ioutil"
 	"net/http"
-
-	"github.com/tsawler/toolbox"
 )
 
+// func main() {
+// 	data := []byte("this is some data stored as a byte slice in Go Lang!")
+
+// 	// convert byte slice to io.Reader
+// 	reader := bytes.NewReader(data)
+
+// 	// read only 4 byte from our io.Reader
+// 	buf := make([]byte, 4)
+// 	n, err := reader.Read(buf)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	log.Println(string(buf[:n]))
+// }
+
 func main() {
-
-	type takemdpayload struct {
-		Userid int `json:"userid"`
-	}
-	type takemdres struct {
-		Message string `json:"message"`
-	}
-	var jsondata takemdpayload
-	jsondata.Userid = 1
-	jsonData, _ := json.MarshalIndent(jsondata, "", "\t")
-	// url := "http://medicineapi:8080/takemed"
-	url := "http://localhost:3000/takemed"
-	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	byte, err := ioutil.ReadFile("sample.wav")
 	if err != nil {
-		log.Panic(err)
+		fmt.Println(29)
+		fmt.Println(err)
 	}
-	request.Header.Set("Content-Type", "application/json")
-	var tool = toolbox.Tools
-	tool.ReadJSON(w, request, &res)
 
-	// err = tools.ReadJSON(w, request, &takemedMessage)
+	url := "http://localhost:8000/foo"
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(byte))
+	request.Header.Set("Content-Type", "mp3-binary")
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
-
-	// var speakpayload SpeakPayload
-	// speakpayload.Content = takemedMessage.message
-	// speakpayload.Speaker = 1
-	// fmt.Printf("takemd message :%s", takemedMessage)
-	// err = app.Speak(w, speakpayload)
-	// if err != nil {
-	// return err
-	// }
+	client := &http.Client{}
+	response, _ := client.Do(request)
+	if err != nil {
+	}
+	defer response.Body.Close()
 }

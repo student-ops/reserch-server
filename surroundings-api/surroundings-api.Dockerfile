@@ -9,9 +9,9 @@ COPY ./cmd/api/*.go ./cmd/api/
 RUN mkdir  ./db-manage
 COPY ./db-manage ./db-manage
 
-RUN go build -o surroundings-storeApp /app/cmd/api/*.go
+RUN go build -o surroundings-apiApp /app/cmd/api/*.go
 
 FROM alpine:3.16
 
-COPY --from=builder /app/surroundings-storeApp /
-CMD ["/surroundings-storeApp"]
+COPY --from=builder /app/surroundings-apiApp /
+CMD ["/surroundings-apiApp"]

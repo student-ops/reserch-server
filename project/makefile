@@ -7,6 +7,14 @@ up: database_up
 	docker-compose up -d
 	@echo "Docker images started!"
 
+serv_up:
+	@echo "Stopping docker images (if running...)"
+	docker-compose down
+	@echo "Building (when required) and starting docker images..."
+	docker-compose up --build -d
+	@echo "Docker images built and started!"
+
+
 database_up:
 	@echo "Starting database Docker images..."
 	docker-compose -f ./database/docker-compose.yml up -d

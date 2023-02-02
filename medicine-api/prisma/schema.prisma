@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // shadowDatabaseUrl = env("SHADOWDB_URL")
 }
 
@@ -20,6 +20,7 @@ model med_schedule {
   state      Boolean
   taken_day  Int
   taken_time Int
+  tabletes   Int
   name       String
   drinker    User    @relation(fields: [user_id], references: [id])
 }

@@ -13,6 +13,7 @@ CREATE TABLE "med_schedule" (
     "state" BOOLEAN NOT NULL,
     "taken_day" INTEGER NOT NULL,
     "taken_time" INTEGER NOT NULL,
+    "tabletes" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "med_schedule_pkey" PRIMARY KEY ("id")

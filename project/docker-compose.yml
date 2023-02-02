@@ -20,11 +20,11 @@ services:
             dockerfile: ./../speaker-service/speaker-service.Dockerfile
         ports:
             - "8081:8080"
-    surroundings-store:
-        container_name: surroundings-store
+    surroundings-api:
+        container_name: surroundings-api
         build:
-            context: ../surroundings-store
-            dockerfile: ../surroundings-store/surroundings-store.Dockerfile
+            context: ../surroundings-api
+            dockerfile: ../surroundings-api/surroundings-api.Dockerfile
         ports:
             - "9000:9000"
         networks:

@@ -1,4 +1,5 @@
 curl -X POST -H 'Content-Type:application-jon' -d '{"id":3}' localhost:9000/data-store
+
 curl -X POST -H 'Content-Type:application-jon' \
 -d '{"device_id":3,"tempreture":21,"air_pressure":1012}' \
 localhost:9000/data-store

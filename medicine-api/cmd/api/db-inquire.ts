@@ -44,7 +44,7 @@ function medcineQuote(
     for (let i = 0; i < fetched.length; i++) {
         if ((fetched[i].taken_day & date) / date == 1) {
             if (fetched[i].taken_time == time) {
-                sentence = fetched[i].name + "と"
+                sentence = fetched[i].name + "を" + fetched[i].tabletes + "錠と"
                 quote += sentence
                 flug++
             }
@@ -59,11 +59,17 @@ function medcineQuote(
     return quote
 }
 export async function getMessage(id: number) {
-    let now = new Date()
-    let now_h = now.getHours() + (now.getTimezoneOffset() + 540) / -60
+    let nown = new Date()
+    const now = new Date(
+        nown.getTime() + (540 - nown.getTimezoneOffset()) * 60 * 1000
+    )
+
+    console.log(now)
+    let now_h = now.getHours()
+    now_h = now_h % 24
     let date = 1 << new Date().getDay()
     let time_zone: number
-    if (now_h < 8) {
+    if (now_h < 9) {
         time_zone = 0
     } else if (now_h < 13) {
         time_zone = 1
